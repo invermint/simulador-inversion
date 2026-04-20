@@ -6,7 +6,7 @@ import { simularInversion } from './utils/calculos.js'
 
 const DEFAULTS = {
   capitalInicial: 5000000,
-  aporteMensual: 500000,
+  aporteMensual: 1000000,
   horizonte: 5,
   perfil: 'Moderado',
   reinversionPct: 80,

@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react'
 import { formatCOP } from '../utils/format.js'
 
 const PERFILES = [
-  { value: 'Conservador', label: 'Conservador', desc: '10% anual · Menor riesgo' },
-  { value: 'Moderado',    label: 'Moderado',    desc: '11% anual · Balance ideal' },
-  { value: 'Crecimiento', label: 'Crecimiento', desc: '12% anual · Mayor potencial' },
+  { value: 'Conservador', label: 'Conservador', desc: '11% E.A. · Menor riesgo' },
+  { value: 'Moderado',    label: 'Moderado',    desc: '13% E.A. · Balance ideal' },
+  { value: 'Crecimiento', label: 'Crecimiento', desc: '15% E.A. · Mayor potencial' },
 ]
 
 const HORIZONTES = [1, 3, 5, 7, 10]
@@ -34,8 +34,8 @@ export default function Step1({ inputs, onChange, onNext }) {
     if (!local.capitalInicial || local.capitalInicial < 100000) {
       errs.capitalInicial = 'Mínimo $100.000 COP'
     }
-    if (local.aporteMensual < 0) {
-      errs.aporteMensual = 'No puede ser negativo'
+    if (local.aporteMensual > 0 && local.aporteMensual < 1000000) {
+      errs.aporteMensual = 'Mínimo $1.000.000 COP (o $0 si no harás aportes)'
     }
     return errs
   }
@@ -50,7 +50,7 @@ export default function Step1({ inputs, onChange, onNext }) {
     onNext(local)
   }
 
-  const perfilData = { Conservador: 10, Moderado: 11, Crecimiento: 12 }
+  const perfilData = { Conservador: 11, Moderado: 13, Crecimiento: 15 }
 
   return (
     <div className="max-w-2xl mx-auto">
@@ -95,13 +95,13 @@ export default function Step1({ inputs, onChange, onNext }) {
               className="input-field pl-8"
               value={local.aporteMensual ? local.aporteMensual.toLocaleString('es-CO') : ''}
               onChange={e => handleMoneyInput('aporteMensual', e.target.value)}
-              placeholder="500.000"
+              placeholder="1.000.000"
             />
           </div>
           {errors.aporteMensual && (
             <p className="text-red-500 text-xs mt-1">{errors.aporteMensual}</p>
           )}
-          <p className="text-xs text-gray-400 mt-1">Puedes poner 0 si no harás aportes periódicos</p>
+          <p className="text-xs text-gray-400 mt-1">Mínimo $1.000.000 COP · Escribe 0 si no harás aportes periódicos</p>
         </div>
 
         {/* Horizonte */}

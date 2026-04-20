@@ -1,7 +1,7 @@
 const PERFILES = {
-  Conservador: { arriendo: 0.04, valorizacion: 0.06, total: 0.10 },
-  Moderado:    { arriendo: 0.05, valorizacion: 0.06, total: 0.11 },
-  Crecimiento: { arriendo: 0.06, valorizacion: 0.06, total: 0.12 },
+  Conservador: { arriendo: 0.05, valorizacion: 0.06, total: 0.11 },
+  Moderado:    { arriendo: 0.07, valorizacion: 0.06, total: 0.13 },
+  Crecimiento: { arriendo: 0.09, valorizacion: 0.06, total: 0.15 },
 }
 
 const CDT_TASA_NOMINAL = 0.12
