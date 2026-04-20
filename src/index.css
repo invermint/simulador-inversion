@@ -1,0 +1,74 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    @apply font-sans antialiased;
+    background-color: #F8F9FA;
+    color: #1A1A2E;
+  }
+
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  input[type="number"] {
+    -moz-appearance: textfield;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-white font-semibold px-8 py-3 rounded-xl
+           hover:bg-primary-dark transition-all duration-200
+           active:scale-95 shadow-md;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-white font-semibold px-8 py-3 rounded-xl
+           hover:bg-accent-dark transition-all duration-200
+           active:scale-95 shadow-md;
+  }
+
+  .input-field {
+    @apply w-full border border-gray-200 rounded-xl px-4 py-3
+           text-gray-800 font-medium focus:outline-none focus:ring-2
+           focus:ring-primary/30 focus:border-primary transition-all duration-200;
+  }
+
+  .label {
+    @apply block text-sm font-semibold text-gray-600 mb-2;
+  }
+}
+
+@layer utilities {
+  .text-primary { color: #1A5276; }
+  .text-accent { color: #27AE60; }
+  .bg-primary { background-color: #1A5276; }
+  .bg-accent { background-color: #27AE60; }
+  .border-primary { border-color: #1A5276; }
+  .border-accent { border-color: #27AE60; }
+  .hover\:bg-primary-dark:hover { background-color: #154360; }
+  .hover\:bg-accent-dark:hover { background-color: #1E8449; }
+  .ring-primary\/30 { --tw-ring-color: rgb(26 82 118 / 0.3); }
+  .focus\:border-primary:focus { border-color: #1A5276; }
+}
+
+.bar-animate {
+  transition: width 400ms ease-in-out;
+}
+
+.recharts-bar-rectangle {
+  transition: all 400ms ease-in-out;
+}
