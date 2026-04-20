@@ -2,20 +2,20 @@ import { useState, useEffect } from 'react'
 import { formatCOP } from '../utils/format.js'
 
 const PERFILES = [
-  { value: 'Conservador', label: 'Conservador', desc: '12% E.A. · Menor riesgo' },
-  { value: 'Moderado',    label: 'Moderado',    desc: '13% E.A. · Balance ideal' },
-  { value: 'Crecimiento', label: 'Crecimiento', desc: '15% E.A. · Mayor potencial' },
+  { value: 'Conservador', label: 'Conservador', desc: '12% E.A. · Menor riesgo', icon: '🛡️' },
+  { value: 'Moderado',    label: 'Moderado',    desc: '13% E.A. · Balance ideal', icon: '⚖️' },
+  { value: 'Crecimiento', label: 'Crecimiento', desc: '15% E.A. · Mayor potencial', icon: '🚀' },
 ]
 
 const HORIZONTES = [1, 3, 5, 7, 10]
+
+const perfilData = { Conservador: 12, Moderado: 13, Crecimiento: 15 }
 
 export default function Step1({ inputs, onChange, onNext }) {
   const [local, setLocal] = useState(inputs)
   const [errors, setErrors] = useState({})
 
-  useEffect(() => {
-    setLocal(inputs)
-  }, [])
+  useEffect(() => { setLocal(inputs) }, [])
 
   function update(field, value) {
     const next = { ...local, [field]: value }
@@ -25,48 +25,66 @@ export default function Step1({ inputs, onChange, onNext }) {
 
   function handleMoneyInput(field, raw) {
     const clean = raw.replace(/[^0-9]/g, '')
-    const num = clean === '' ? 0 : parseInt(clean, 10)
-    update(field, num)
+    update(field, clean === '' ? 0 : parseInt(clean, 10))
   }
 
   function validate() {
     const errs = {}
-    if (!local.capitalInicial || local.capitalInicial < 100000) {
+    if (!local.capitalInicial || local.capitalInicial < 100000)
       errs.capitalInicial = 'Mínimo $100.000 COP'
-    }
-    if (local.aporteMensual > 0 && local.aporteMensual < 1000000) {
+    if (local.aporteMensual > 0 && local.aporteMensual < 1000000)
       errs.aporteMensual = 'Mínimo $1.000.000 COP (o $0 si no harás aportes)'
-    }
     return errs
   }
 
   function handleSubmit(e) {
     e.preventDefault()
     const errs = validate()
-    if (Object.keys(errs).length > 0) {
-      setErrors(errs)
-      return
-    }
+    if (Object.keys(errs).length > 0) { setErrors(errs); return }
     onNext(local)
   }
 
-  const perfilData = { Conservador: 12, Moderado: 13, Crecimiento: 15 }
+  // Pérdida por inflación anual sobre el capital ingresado
+  const perdidaInflacion = Math.round((local.capitalInicial || 0) * 0.065)
 
   return (
     <div className="max-w-2xl mx-auto">
+
+      {/* ── Hero headline ── */}
       <div className="text-center mb-8">
-        <h1 className="text-3xl font-bold mb-2" style={{ color: '#1A5276' }}>
-          Simula tu inversión
+        <div
+          className="inline-block text-xs font-bold px-3 py-1 rounded-full mb-3"
+          style={{ backgroundColor: '#EAFAF1', color: '#1E8449' }}
+        >
+          🏠 Calculadora gratuita · Sin registro previo
+        </div>
+        <h1 className="text-3xl sm:text-4xl font-bold mb-3 leading-tight" style={{ color: '#1A5276' }}>
+          ¿Cuánto puede valer<br className="hidden sm:block" /> tu dinero en bienes raíces?
         </h1>
-        <p className="text-gray-500 text-base">
-          Ingresa tus datos para ver cómo crece tu dinero con fracciones inmobiliarias
+        <p className="text-gray-500 text-base max-w-md mx-auto">
+          Simula tu crecimiento patrimonial en segundos y compara contra un CDT.
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      {/* ── Alerta de inflación (loss aversion) ── */}
+      {(local.capitalInicial || 0) >= 100000 && (
+        <div
+          className="rounded-xl px-4 py-3 mb-6 flex items-start gap-3 text-sm"
+          style={{ backgroundColor: '#FEF9E7', borderLeft: '4px solid #F39C12' }}
+        >
+          <span className="text-xl">⚠️</span>
+          <p className="text-yellow-800">
+            <strong>La inflación (6.5% anual) le está quitando {formatCOP(perdidaInflacion)} a tu capital este año.</strong>
+            {' '}Invertir es la única forma de proteger tu patrimonio.
+          </p>
+        </div>
+      )}
+
+      <form onSubmit={handleSubmit} className="space-y-5">
+
         {/* Capital inicial */}
         <div className="card">
-          <label className="label">Capital inicial</label>
+          <label className="label">Capital inicial a invertir</label>
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
             <input
@@ -78,15 +96,15 @@ export default function Step1({ inputs, onChange, onNext }) {
               placeholder="5.000.000"
             />
           </div>
-          {errors.capitalInicial && (
-            <p className="text-red-500 text-xs mt-1">{errors.capitalInicial}</p>
-          )}
-          <p className="text-xs text-gray-400 mt-1">Mínimo $100.000 COP · Valor en pesos colombianos</p>
+          {errors.capitalInicial
+            ? <p className="text-red-500 text-xs mt-1">{errors.capitalInicial}</p>
+            : <p className="text-xs text-gray-400 mt-1">Mínimo $100.000 COP · Equivale a ~$250 USD</p>
+          }
         </div>
 
         {/* Aportes mensuales */}
         <div className="card">
-          <label className="label">Aportes mensuales</label>
+          <label className="label">Aportes mensuales adicionales</label>
           <div className="relative">
             <span className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 font-medium">$</span>
             <input
@@ -98,15 +116,15 @@ export default function Step1({ inputs, onChange, onNext }) {
               placeholder="1.000.000"
             />
           </div>
-          {errors.aporteMensual && (
-            <p className="text-red-500 text-xs mt-1">{errors.aporteMensual}</p>
-          )}
-          <p className="text-xs text-gray-400 mt-1">Mínimo $1.000.000 COP · Escribe 0 si no harás aportes periódicos</p>
+          {errors.aporteMensual
+            ? <p className="text-red-500 text-xs mt-1">{errors.aporteMensual}</p>
+            : <p className="text-xs text-gray-400 mt-1">Mínimo $1.000.000 COP · Escribe 0 si no harás aportes periódicos</p>
+          }
         </div>
 
         {/* Horizonte */}
         <div className="card">
-          <label className="label">Horizonte de inversión</label>
+          <label className="label">¿En cuánto tiempo quieres ver resultados?</label>
           <div className="flex gap-2 flex-wrap">
             {HORIZONTES.map(h => (
               <button
@@ -141,9 +159,12 @@ export default function Step1({ inputs, onChange, onNext }) {
                   backgroundColor: local.perfil === p.value ? '#EBF5FB' : 'white',
                 }}
               >
-                <div>
-                  <span className="font-semibold text-gray-800">{p.label}</span>
-                  <span className="ml-2 text-gray-500 text-sm">{p.desc}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{p.icon}</span>
+                  <div>
+                    <span className="font-semibold text-gray-800">{p.label}</span>
+                    <span className="ml-2 text-gray-500 text-sm">{p.desc}</span>
+                  </div>
                 </div>
                 <span
                   className="font-bold text-lg"
@@ -154,12 +175,18 @@ export default function Step1({ inputs, onChange, onNext }) {
               </button>
             ))}
           </div>
+          <p className="text-xs text-gray-400 mt-2">
+            📈 Incluye arriendo + valorización del inmueble · Efectivo anual
+          </p>
         </div>
 
         {/* % Reinversión */}
         <div className="card">
           <div className="flex items-center justify-between mb-3">
-            <label className="label mb-0">% Rendimientos reinvertidos</label>
+            <div>
+              <label className="label mb-0">% Rendimientos reinvertidos</label>
+              <p className="text-xs text-gray-400 mt-0.5">El resto lo recibes como ingreso pasivo mensual</p>
+            </div>
             <span className="text-2xl font-bold" style={{ color: '#1A5276' }}>
               {local.reinversionPct}%
             </span>
@@ -178,31 +205,31 @@ export default function Step1({ inputs, onChange, onNext }) {
             }}
           />
           <div className="flex justify-between text-xs text-gray-400 mt-1">
-            <span>0% · Retiro total</span>
-            <span>100% · Reinversión total</span>
+            <span>0% · Retiras todo</span>
+            <span>100% · Máximo crecimiento</span>
           </div>
-          <p className="text-xs text-gray-400 mt-2">
-            El {100 - local.reinversionPct}% de los arriendos lo recibirías como ingreso mensual
-          </p>
         </div>
 
-        {/* Resumen rápido */}
+        {/* Resumen + CTA */}
         <div
-          className="rounded-xl px-5 py-4 text-sm"
+          className="rounded-xl px-5 py-4 text-sm mb-2"
           style={{ backgroundColor: '#EBF5FB', borderLeft: '4px solid #1A5276' }}
         >
-          <p className="font-semibold" style={{ color: '#1A5276' }}>Resumen de tu inversión</p>
-          <p className="text-gray-600 mt-1">
-            Capital inicial de <strong>{formatCOP(local.capitalInicial || 0)}</strong> con aportes de{' '}
-            <strong>{formatCOP(local.aporteMensual || 0)}/mes</strong> durante{' '}
-            <strong>{local.horizonte} {local.horizonte === 1 ? 'año' : 'años'}</strong> en perfil{' '}
-            <strong>{local.perfil}</strong>.
-          </p>
+          <p className="font-semibold" style={{ color: '#1A5276' }}>Tu simulación incluirá:</p>
+          <ul className="text-gray-600 mt-1 space-y-0.5">
+            <li>✓ Proyección año a año de tu portafolio</li>
+            <li>✓ Comparativa directa vs CDT tradicional</li>
+            <li>✓ Cuánto más ganarías con Invermint</li>
+          </ul>
         </div>
 
-        <button type="submit" className="btn-primary w-full text-lg py-4">
-          Ver simulación →
+        <button type="submit" className="btn-primary w-full text-lg py-4 rounded-xl">
+          Calcular mi proyección →
         </button>
+
+        <p className="text-center text-xs text-gray-400">
+          🔒 Sin compromiso · Resultado en segundos · Gratis
+        </p>
       </form>
     </div>
   )
