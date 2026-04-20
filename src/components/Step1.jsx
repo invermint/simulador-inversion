@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { formatCOP } from '../utils/format.js'
 
 const PERFILES = [
-  { value: 'Conservador', label: 'Conservador', desc: '11% E.A. · Menor riesgo' },
+  { value: 'Conservador', label: 'Conservador', desc: '12% E.A. · Menor riesgo' },
   { value: 'Moderado',    label: 'Moderado',    desc: '13% E.A. · Balance ideal' },
   { value: 'Crecimiento', label: 'Crecimiento', desc: '15% E.A. · Mayor potencial' },
 ]
@@ -50,7 +50,7 @@ export default function Step1({ inputs, onChange, onNext }) {
     onNext(local)
   }
 
-  const perfilData = { Conservador: 11, Moderado: 13, Crecimiento: 15 }
+  const perfilData = { Conservador: 12, Moderado: 13, Crecimiento: 15 }
 
   return (
     <div className="max-w-2xl mx-auto">

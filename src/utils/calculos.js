@@ -1,5 +1,5 @@
 const PERFILES = {
-  Conservador: { arriendo: 0.05, valorizacion: 0.06, total: 0.11 },
+  Conservador: { arriendo: 0.06, valorizacion: 0.06, total: 0.12 },
   Moderado:    { arriendo: 0.07, valorizacion: 0.06, total: 0.13 },
   Crecimiento: { arriendo: 0.09, valorizacion: 0.06, total: 0.15 },
 }
@@ -18,11 +18,12 @@ export function simularInversion({ capitalInicial, aporteMensual, horizonte, per
   let cdt = capitalInicial
   const timeline = []
 
+  const { total } = PERFILES[perfil]
+
   for (let year = 1; year <= horizonte; year++) {
-    // Fracciones inmobiliarias
-    portfolio = portfolio * (1 + valorizacion)
-              + (portfolio * arriendo * reinvest)
-              + (aporte * 12)
+    // Portafolio siempre crece a la tasa total anunciada
+    // El slider de reinversión es informativo (cuánto retiras vs reinviertes)
+    portfolio = portfolio * (1 + total) + (aporte * 12)
 
     // CDT
     cdt = cdt * (1 + CDT_TASA_NETA) + (aporte * 12)
