@@ -4,16 +4,17 @@ import Step2 from './components/Step2.jsx'
 import Step3 from './components/Step3.jsx'
 import { simularInversion } from './utils/calculos.js'
 
-// ─── BRAND COLORS ───────────────────────────────────────────────
-// Actualiza estos valores con los colores exactos de invermint.com
-const BRAND = {
-  primary:     '#1A5276',   // Azul principal
-  primaryDark: '#154360',
-  accent:      '#27AE60',   // Verde acento
-  accentDark:  '#1E8449',
-  accentLight: '#EAFAF1',
-  bg:          '#F8F9FA',
-  text:        '#1A1A2E',
+// ── Paleta oficial Invermint ──────────────────────────────────
+const C = {
+  navy:       '#0D3B50',   // logo oscuro / fondo header
+  navyDark:   '#0A2D3E',
+  teal:       '#1A7090',   // teal medio
+  mint:       '#6EECD4',   // verde menta (accent principal)
+  mintDark:   '#4DD4BC',
+  mintLight:  '#E8FAF7',   // fondos suaves
+  coral:      '#EF7070',   // acento cálido
+  bg:         '#F4FAFA',   // fondo general
+  text:       '#0D3B50',
 }
 
 const DEFAULTS = {
@@ -44,25 +45,34 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: BRAND.bg }}>
+    <div className="min-h-screen" style={{ backgroundColor: C.bg }}>
 
-      {/* ── Barra de prueba social (trust bar) ── */}
+      {/* ── Trust bar ── */}
       <div
-        className="text-white text-center py-2 text-xs sm:text-sm font-medium"
-        style={{ backgroundColor: BRAND.accent }}
+        className="text-center py-2 text-xs sm:text-sm font-semibold"
+        style={{ backgroundColor: C.mint, color: C.navy }}
       >
-        🏠 +1.200 inversores ya hacen crecer su patrimonio con Invermint · Inversión mínima desde $250 USD
+        🏠 +1.200 inversores ya hacen crecer su patrimonio con înverMint · Desde $250 USD
       </div>
 
       {/* ── Header ── */}
-      <header style={{ backgroundColor: BRAND.primary }} className="text-white shadow-lg">
+      <header style={{ backgroundColor: C.navy }} className="shadow-lg">
         <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="https://invermint.com" target="_blank" rel="noopener noreferrer"
-             className="flex items-center gap-2 hover:opacity-90 transition-opacity">
-            <span className="text-2xl font-bold tracking-tight">Invermint</span>
+          <a
+            href="https://invermint.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 hover:opacity-90 transition-opacity"
+          >
+            {/* Logo text con tipografía de marca */}
+            <span className="text-2xl font-bold tracking-tight" style={{ color: C.mint }}>
+              î<span className="text-white">nver</span>
+              <span style={{ color: C.mint }}>Mint</span>
+              <span className="text-white">.</span>
+            </span>
             <span
-              className="text-xs font-semibold px-2 py-0.5 rounded-full"
-              style={{ backgroundColor: BRAND.accent }}
+              className="text-xs font-bold px-2 py-0.5 rounded-full"
+              style={{ backgroundColor: 'rgba(110,236,212,0.15)', color: C.mint, border: `1px solid ${C.mint}` }}
             >
               Simulador
             </span>
@@ -71,8 +81,8 @@ export default function App() {
             href="https://invermint.com"
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:flex items-center gap-1 text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200 hover:opacity-90"
-            style={{ backgroundColor: BRAND.accent, color: 'white' }}
+            className="hidden sm:flex items-center gap-1 text-sm font-bold px-4 py-2 rounded-full transition-all duration-200 hover:opacity-90"
+            style={{ backgroundColor: C.mint, color: C.navy }}
           >
             Ir al sitio →
           </a>
@@ -93,13 +103,13 @@ export default function App() {
                   className={`flex items-center gap-2 px-3 py-2 rounded-full transition-all duration-200 ${
                     active ? 'font-semibold' : done ? 'cursor-pointer hover:opacity-80' : 'opacity-40 cursor-default'
                   }`}
-                  style={{ color: active || done ? BRAND.primary : '#9CA3AF' }}
+                  style={{ color: active || done ? C.navy : '#9CA3AF' }}
                 >
                   <span
                     className="w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold transition-all duration-300"
                     style={{
-                      backgroundColor: active ? BRAND.primary : done ? BRAND.accent : '#E5E7EB',
-                      color: active || done ? 'white' : '#9CA3AF',
+                      backgroundColor: active ? C.navy : done ? C.mint : '#E5E7EB',
+                      color: active ? 'white' : done ? C.navy : '#9CA3AF',
                     }}
                   >
                     {done ? '✓' : num}
@@ -111,7 +121,7 @@ export default function App() {
                 {i < STEPS.length - 1 && (
                   <div
                     className="w-8 sm:w-16 h-0.5 mx-1 transition-all duration-300"
-                    style={{ backgroundColor: done ? BRAND.accent : '#E5E7EB' }}
+                    style={{ backgroundColor: done ? C.mint : '#E5E7EB' }}
                   />
                 )}
               </div>
@@ -132,15 +142,20 @@ export default function App() {
       <footer className="border-t border-gray-200 mt-12 py-8 text-center">
         <div className="max-w-4xl mx-auto px-4">
           <div className="flex flex-wrap justify-center gap-4 mb-4 text-sm">
-            <span className="flex items-center gap-1 text-gray-500">🔒 Datos seguros</span>
-            <span className="flex items-center gap-1 text-gray-500">✅ Sin costos ocultos</span>
-            <span className="flex items-center gap-1 text-gray-500">🏦 Respaldado por activos reales</span>
+            <span className="text-gray-500">🔒 Datos seguros</span>
+            <span className="text-gray-500">✅ Sin costos ocultos</span>
+            <span className="text-gray-500">🏦 Respaldado por activos reales</span>
           </div>
           <p className="text-gray-400 text-xs">
-            © 2025 Invermint · Simulación con fines informativos · No constituye asesoría financiera
+            © 2025 înverMint · Simulación con fines informativos · No constituye asesoría financiera
           </p>
-          <a href="https://invermint.com" target="_blank" rel="noopener noreferrer"
-             className="text-xs mt-1 block hover:underline" style={{ color: '#1A5276' }}>
+          <a
+            href="https://invermint.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs mt-1 block hover:underline"
+            style={{ color: C.teal }}
+          >
             invermint.com
           </a>
         </div>

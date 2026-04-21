@@ -3,14 +3,12 @@
 @tailwind utilities;
 
 @layer base {
-  * {
-    box-sizing: border-box;
-  }
+  * { box-sizing: border-box; }
 
   body {
     @apply font-sans antialiased;
-    background-color: #F8F9FA;
-    color: #1A1A2E;
+    background-color: #F4FAFA;
+    color: #0D3B50;
   }
 
   input[type="number"]::-webkit-inner-spin-button,
@@ -18,10 +16,7 @@
     -webkit-appearance: none;
     margin: 0;
   }
-
-  input[type="number"] {
-    -moz-appearance: textfield;
-  }
+  input[type="number"] { -moz-appearance: textfield; }
 }
 
 @layer components {
@@ -29,44 +24,31 @@
     @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
   }
 
+  /* btn-primary: texto oscuro sobre mint (el mint es claro) */
   .btn-primary {
-    @apply bg-primary text-white font-semibold px-8 py-3 rounded-xl
-           hover:bg-primary-dark transition-all duration-200
-           active:scale-95 shadow-md;
+    background-color: #6EECD4;
+    color: #0D3B50;
+    @apply font-bold px-8 py-3 rounded-xl transition-all duration-200 active:scale-95 shadow-md;
   }
+  .btn-primary:hover { background-color: #4DD4BC; }
 
-  .btn-accent {
-    @apply bg-accent text-white font-semibold px-8 py-3 rounded-xl
-           hover:bg-accent-dark transition-all duration-200
-           active:scale-95 shadow-md;
+  .btn-navy {
+    background-color: #0D3B50;
+    @apply text-white font-bold px-8 py-3 rounded-xl transition-all duration-200 active:scale-95 shadow-md;
   }
+  .btn-navy:hover { background-color: #0A2D3E; }
 
   .input-field {
     @apply w-full border border-gray-200 rounded-xl px-4 py-3
            text-gray-800 font-medium focus:outline-none focus:ring-2
-           focus:ring-primary/30 focus:border-primary transition-all duration-200;
+           transition-all duration-200;
+    --tw-ring-color: rgb(110 236 212 / 0.4);
   }
+  .input-field:focus { border-color: #6EECD4; }
 
   .label {
     @apply block text-sm font-semibold text-gray-600 mb-2;
   }
-}
-
-@layer utilities {
-  .text-primary { color: #1A5276; }
-  .text-accent { color: #27AE60; }
-  .bg-primary { background-color: #1A5276; }
-  .bg-accent { background-color: #27AE60; }
-  .border-primary { border-color: #1A5276; }
-  .border-accent { border-color: #27AE60; }
-  .hover\:bg-primary-dark:hover { background-color: #154360; }
-  .hover\:bg-accent-dark:hover { background-color: #1E8449; }
-  .ring-primary\/30 { --tw-ring-color: rgb(26 82 118 / 0.3); }
-  .focus\:border-primary:focus { border-color: #1A5276; }
-}
-
-.bar-animate {
-  transition: width 400ms ease-in-out;
 }
 
 .recharts-bar-rectangle {
